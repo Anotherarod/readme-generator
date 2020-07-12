@@ -71,6 +71,8 @@ async function render(){
         const tests = userResponse.tests;
 
 
+        const gitResponse = await axios.get(`https://api.github.com/users/${gitUsername}`);
+
 
 
 
