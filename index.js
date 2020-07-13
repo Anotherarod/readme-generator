@@ -48,7 +48,7 @@ async function render(){
         },
         {
             type: "input",
-            message: "please enter git hub user names of the contributor if any (If there are mulitple contributor, seperate names with comma and no space! )",
+            message: "please enter git hub user names of the contributor. )",
             name: "contributorsGithubUserName"
         },
         {
@@ -79,6 +79,8 @@ async function render(){
         const gitUrl = gitData.html_url;
         const gitProfileImage = gitData.avatar_url;
 
+        const contributorUserNameArr = contributorUserName.split(",");
+        console.log(contributorUserNameArr);
 
 
 
