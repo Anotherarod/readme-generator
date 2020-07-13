@@ -98,7 +98,7 @@ async function render(){
             var gitContributorEmail = response.data.email;
             var resultContributor = resultContributor + (`\n <img src="${gitContributorProfileImage}" alt="drawing" width="150" display="inline"/> ${contributorUserName}  GitHubLink: ${gitContributorUrl}`);
             var result = (`
-            # ${projectTitle} 
+            ${projectTitle} 
             ${projectDescription}
             \n* [![GitHub tag](https://img.shields.io/github/tag/${gitUsername}/${projectTitle}.svg)](https://GitHub.com/${gitUsername}/${projectTitle}/tags/)
             \n* [Installation](#Installation)
@@ -111,9 +111,7 @@ async function render(){
             ${installation}
             ## Instructions
             ${instruction}
-           
-            \`\`\`
-            ## License 
+           ## License 
             This project is licensed under the ${licenseName} - see the ${licenseUrl} file for details
             ## Contributors
             ${resultContributor}
@@ -126,7 +124,7 @@ async function render(){
             \nLocation:${gitlocation}
             \nGitHub: ${gitUrl}
             `)
-            var writeResult = fs.writeFileSync(path.join(__dirname, '../readme-homework', 'readMe.md'), result )
+            fs.writeFileSync(path.join(__dirname, '../readme-homework', 'readMe.md'), result )
             console.log("file generated....")
                 });
             }
@@ -200,3 +198,4 @@ async function render(){
 
 
 render();
+

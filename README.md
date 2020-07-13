@@ -1,8 +1,8 @@
 
-            # GOOD readme Generator 
-            Create a command-line application that dynamically generates a README.md from a user's input. The application will be invoked withthe following command node index.js The user will be prompted for their GitHub username, which will be used to make a call to the GitHub API to retrieve their email and profile image. They will then be prompted with questions about their project.
+            Good readme Generator 
+            Create a command-line application that dynamically generates a README.md from a user's input.
             
-* [![GitHub tag](https://img.shields.io/github/tag/Anotherarod/GOOD readme Generator.svg)](https://GitHub.com/Anotherarod/GOOD readme Generator/tags/)
+* [![GitHub tag](https://img.shields.io/github/tag/Anotherarod/Good readme Generator.svg)](https://GitHub.com/Anotherarod/Good readme Generator/tags/)
             
 * [Installation](#Installation)
             
@@ -18,16 +18,14 @@
             ## Installation
             undefined
             ## Instructions
-            User is prompt to answer questions. once the questionnaire is completed, a readme file will be generated. User runs node index.js and the application starts.
-           
-            ```
-            ## License 
-            This project is licensed under the MIT - see the https://choosealicense.com/licenses/mit/ file for details
+            In your temrinal input node index.js and follow the prompts.
+           ## License 
+            This project is licensed under the MIT - see the https://choosealicense.com/licenses/mit/  file for details
             ## Contributors
             undefined
  <img src="https://avatars1.githubusercontent.com/u/66573549?v=4" alt="drawing" width="150" display="inline"/> Anotherarod  GitHubLink: https://github.com/Anotherarod
             ## Tests
-            On the command line type node.index.js to see if application is working.
+            npm run jest
             ## Author 
             
 ![ProfileImage](https://avatars1.githubusercontent.com/u/66573549?v=4)
