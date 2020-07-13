@@ -72,7 +72,12 @@ async function render(){
 
 
         const gitResponse = await axios.get(`https://api.github.com/users/${gitUsername}`);
-
+        const gitData = gitResponse.data;
+        const gitName = gitData.login;
+        const gitEmail = gitData.email;
+        const gitlocation = gitData.location;
+        const gitUrl = gitData.html_url;
+        const gitProfileImage = gitData.avatar_url;
 
 
 
