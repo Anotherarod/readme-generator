@@ -13,6 +13,11 @@ async function render(){
         },
         {
             type: "input",
+            message: "What is your email?",
+            name: "email"
+        },
+        {
+            type: "input",
             message: "What is your Project Title?",
             name: "projectTitle"
         },
@@ -23,8 +28,8 @@ async function render(){
         },
         {
             type: "input",
-            message: "What are the steps required to install your project? Provide a step-by-step description of how to get the development environment running.",
-            name: "installationProcess"
+            message: "What are the steps required to install the node libraries for you project?",
+            name: "installation"
         },
         {
             type: "input",
@@ -43,7 +48,7 @@ async function render(){
         },
         {
             type: "input",
-            message: "please enter git hub user names of the contributor.",
+            message: "please enter git hub user name of the contributor.",
             name: "contributorUserName"
         },
         {
@@ -57,7 +62,7 @@ async function render(){
         const gitUsername = userResponse.username;
         const projectTitle = userResponse.projectTitle;
         const projectDescription = userResponse.projectDescription;
-        const installationProcess = userResponse.installationProcess;
+        const installation = userResponse.installationProcess;
         const instruction = userResponse.instruction;
         // const instructionExample = userResponse.instructionExample;
         const licenseName = userResponse.licenseName;
@@ -103,7 +108,7 @@ async function render(){
             \n* [Author](#Author)
             \n* [Tests](#Tests)
             ## Installation
-            ${installationProcess}
+            ${installation}
             ## Instructions
             ${instruction}
            
