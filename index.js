@@ -1,20 +1,15 @@
-const inquirer = require('inquirer');
-const axios = require('axios');
+const inquirer = require("inquirer");
+const axios = require("axios");
 const fs = require('fs');
 const path = require('path');
-async function render(){
-    console.log('start');
+async function main(){
+    console.log(`starting`);
     const userResponse = await inquirer
     .prompt([
         {
             type: "input",
             message: "What is your GitHub user name?",
             name: "username"
-        },
-        {
-            type: "input",
-            message: "What is your email?",
-            name: "email"
         },
         {
             type: "input",
@@ -28,13 +23,18 @@ async function render(){
         },
         {
             type: "input",
-            message: "What are the steps required to install the node libraries for you project?",
-            name: "installation"
+            message: "What are the steps required to install your project? Provide a step-by-step description of how to get the development environment running.",
+            name: "installationProcess"
         },
         {
             type: "input",
             message: "Provide instructions for use.",
             name: "instruction"
+        },
+        {
+            type: "input",
+            message: "Provide instructions examples for use.",
+            name: "instructionExample"
         },
         {
             type: "input",
@@ -48,8 +48,8 @@ async function render(){
         },
         {
             type: "input",
-            message: "please enter git hub user name of the contributor.",
-            name: "contributorUserName"
+            message: "please enter git hub user names of the contributor if any (If there are mulitple contributor, seperate names with comma and no space! )",
+            name: "contributorsGitUserName"
         },
         {
             type: "input",
@@ -57,145 +57,80 @@ async function render(){
             name: "tests"
         }
         ]);
-        console.log(`start`);
+        console.log(`starting`);
         console.log(userResponse);
         const gitUsername = userResponse.username;
         const projectTitle = userResponse.projectTitle;
         const projectDescription = userResponse.projectDescription;
-        const installation = userResponse.installationProcess;
+        const installationProcess = userResponse.installationProcess;
         const instruction = userResponse.instruction;
-        // const instructionExample = userResponse.instructionExample;
+        const instructionExample = userResponse.instructionExample;
         const licenseName = userResponse.licenseName;
         const licenseUrl = userResponse.licenseUrl;
-        const contributorUserName = userResponse.contributorUserName;
-        console.log(contributorUserName)
+        const contributorUserNames = userResponse.contributorsGitUserName;
         const tests = userResponse.tests;
-
-
-         axios.get(`https://api.github.com/users/${gitUsername}`).then(response => { console.log(response.data);
-    gitResponse=response;
-    
-    const gitData = gitResponse.data;
-    const gitName = gitData.login;
-    const gitEmail = gitData.email;
-    const gitlocation = gitData.location;
-    const gitUrl = gitData.html_url;
-    const gitProfileImage = gitData.avatar_url; 
-    console.log(response)
+            // fetching data from git
+            // user
+        const gitResponse = await axios.get(`https://api.github.com/users/${gitUsername}`);
+        const gitData = gitResponse.data;
+        const gitName = gitData.login;
+        const gitEmail = gitData.email;
+        const gitlocation = gitData.location;
+        const gitUrl = gitData.html_url;
+        const gitProfileImage = gitData.avatar_url;
+            // contributor
+        const contributorUserNamesArray = contributorUserNames.split(",");
+        console.log(contributorUserNamesArray);
+        // const  = listOfContributorsUserNames.
+        // contributorsGitUserName
+        var resultContributor;
+        for (i=0; i<contributorUserNamesArray.length; i++){
+            var contributorsGitUserName = contributorUserNamesArray[i]
+            const gitResponse2 = await axios.get(`https://api.github.com/users/${contributorsGitUserName}`);
+            var gitContribuProfileImage = gitResponse2.data.avatar_url;
+            var gitContribuUrl = gitResponse2.data.html_url;
+            var gitContribuEmail = gitResponse2.data.email;
+            var resultContributor = resultContributor + (`
+            \n <img src="${gitContribuProfileImage}" alt="drawing" width="150" display="inline"/> ${contributorsGitUserName}  GitHubLink: ${gitContribuUrl}`);
+        }
+        var result = (`
+# ${projectTitle} 
+${projectDescription}
+\n* [Installation](#Installation)
+\n* [Instructions](#Instructions)
+\n* [License](#License)
+\n* [Contributors](#Contributors)
+\n* [Author](#Author)
+\n* [Tests](#Tests)
+## Installation
+${installationProcess}
+## Instructions
+${instruction}
+\`\`\`
+${instructionExample}
+\`\`\`
+## License 
+This project is licensed under the ${licenseName} - see the ${licenseUrl} file for details
+## Contributors
+${resultContributor}
+## Tests
+${tests}
+## Author 
+\n![ProfileImage](${gitProfileImage})
+\n**${gitName}**
+\nEmail: ${gitEmail}
+\nLocation:${gitlocation}
+\nGitHub: ${gitUrl}
+`)
+fs.writeFileSync(path.join(__dirname, '../readme-homework', 'readMe.md'), result )
+console.log("file generated....")
+    }
+main();
      
 
-    const contributorUserNameArr = contributorUserName.split(",");
-    console.log(contributorUserNameArr);
-
-  
-    for (i=0; i<contributorUserNameArr.length; i++){
-        var nextUserName = contributorUserNameArr[i]
-            axios.get(`https://api.github.com/users/${nextUserName}`).then(response => {
-
-            console.log(response)
-            var gitContributorProfileImage = response.data.avatar_url;
-            var gitContributorUrl = response.data.html_url;
-            var gitContributorEmail = response.data.email;
-            var resultContributor = resultContributor + (`\n <img src="${gitContributorProfileImage}" alt="drawing" width="150" display="inline"/> ${contributorUserName}  GitHubLink: ${gitContributorUrl}`);
-            var result = (`
-            ${projectTitle} 
-            ${projectDescription}
-            \n* [![GitHub tag](https://img.shields.io/github/tag/${gitUsername}/${projectTitle}.svg)](https://GitHub.com/${gitUsername}/${projectTitle}/tags/)
-            \n* [Installation](#Installation)
-            \n* [Instructions](#Instructions)
-            \n* [License](#License)
-            \n* [Contributor](#Contributor)
-            \n* [Author](#Author)
-            \n* [Tests](#Tests)
-            ## Installation
-            ${installation}
-            ## Instructions
-            ${instruction}
-           ## License 
-            This project is licensed under the ${licenseName} - see the ${licenseUrl} file for details
-            ## Contributors
-            ${resultContributor}
-            ## Tests
-            ${tests}
-            ## Author 
-            \n![ProfileImage](${gitProfileImage})
-            \n**${gitName}**
-            \nEmail: ${gitEmail}
-            \nLocation:${gitlocation}
-            \nGitHub: ${gitUrl}
-            `)
-            fs.writeFileSync(path.join(__dirname, '../readme-homework', 'readMe.md'), result )
-            console.log("file generated....")
-                });
-            }
-        });
-
-}
-    
-    
-    
-
-
-    
-      
-     
-
-        // const contributorUserNameArr = contributorUserName.split(",");
-        // console.log(contributorUserNameArr);
-
-        // var resultContributor;
-        // for (i=0; i<contributorUserNameArr.length; i++){
-        //     var nextUserName = contributorUserNameArr[i]
-        //         axios.get(`https://api.github.com/users/${nextUserName}`).then(response => {
-
-        //         console.log(response)
-        //         var gitContributorProfileImage = response.data.avatar_url;
-        //         var gitContributorUrl = response.data.html_url;
-        //         var gitContributorEmail = response.data.email;
-        //         var resultContributor = resultContributor + (`\n <img src="${gitContributorProfileImage}" alt="drawing" width="150" display="inline"/> ${contributorUserName}  GitHubLink: ${gitContributorUrl}`);
-                
-            
-        //     });
-       
-        // }
-        // var result = (`
-        // # ${projectTitle} 
-        // ${projectDescription}
-        // \n* [Installation](#Installation)
-        // \n* [Instructions](#Instructions)
-        // \n* [License](#License)
-        // \n* [Contributor](#Contributor)
-        // \n* [Author](#Author)
-        // \n* [Tests](#Tests)
-        // ## Installation
-        // ${installationProcess}
-        // ## Instructions
-        // ${instruction}
-       
-        // \`\`\`
-        // ## License 
-        // This project is licensed under the ${licenseName} - see the ${licenseUrl} file for details
-        // ## Contributors
-        // ${resultContributor}
-        // ## Tests
-        // ${tests}
-        // ## Author 
-        // \n![ProfileImage](${gitProfileImage})
-        // \n**${gitName}**
-        // \nEmail: ${gitEmail}
-        // \nLocation:${gitlocation}
-        // \nGitHub: ${gitUrl}
-        // `)
-        // var writeResult = fs.writeFileSync(path.join(__dirname, '../readme-homework', 'readMe.md'), result )
-        // console.log("file generated....")
-        //     }
 
 
 
 
 
-
-
-
-render();
 
